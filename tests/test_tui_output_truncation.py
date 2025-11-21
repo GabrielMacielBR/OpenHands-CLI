@@ -24,3 +24,12 @@ class TestTruncateOutput:
         assert len(result_lines) == MAX_OUTPUT_LINES + 1
         assert was_truncated is True
         assert "more lines" in result
+    
+    def test_shows_correct_hidden_line_count(self):
+    """Truncation message should show how many lines were hidden."""
+    output = "\n".join([f"Line {i}" for i in range(100)])
+    
+    result, was_truncated = truncate_output(output)
+    
+    assert "85" in result  
+    assert was_truncated is True
