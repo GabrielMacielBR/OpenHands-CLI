@@ -11,7 +11,7 @@ from openhands_cli.pt_style import get_cli_style
 
 # Output truncation settings
 MAX_OUTPUT_LINES = 15
-TRUNCATION_MESSAGE = "... and {remaining} more lines hidden"
+TRUNCATION_MESSAGE = "... and {remaining} more lines (type /full to see complete output)"
 
 DEFAULT_STYLE = get_cli_style()
 
