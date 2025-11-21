@@ -13,3 +13,14 @@ class TestTruncateOutput:
         
         assert result == short_output
         assert was_truncated is False
+    
+    def test_long_output_truncated(self):
+        """Output with more lines than max should be truncated."""
+        long_output = "\n".join([f"Line {i}" for i in range(20)])
+        
+        result, was_truncated = truncate_output(long_output)
+        
+        result_lines = result.splitlines()
+        assert len(result_lines) == MAX_OUTPUT_LINES + 1
+        assert was_truncated is True
+        assert "more lines" in result
