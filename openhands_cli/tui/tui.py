@@ -9,6 +9,8 @@ from prompt_toolkit.shortcuts import clear
 
 from openhands_cli.pt_style import get_cli_style
 
+# Output truncation settings
+MAX_OUTPUT_LINES = 15
 
 DEFAULT_STYLE = get_cli_style()
 
@@ -23,6 +25,7 @@ COMMANDS = {
     "/resume": "Resume a paused conversation",
     "/settings": "Display and modify current settings",
     "/mcp": "View MCP (Model Context Protocol) server configuration",
+    "/full": "Show the complete output of the last command",
 }
 
 
@@ -100,3 +103,21 @@ def display_welcome(conversation_id: UUID, resume: bool = False) -> None:
         )
     )
     print()
+
+def truncate_output(output: str, max_lines: int = MAX_OUTPUT_LINES) -> tuple[str, bool]:
+    """
+    Truncate command output to a specified number of lines.
+    
+    Args:
+        output: The full output text
+        max_lines: Maximum number of lines to display
+    
+    Returns:
+        Tuple of (output, was_truncated)
+    """
+    lines = output.splitlines()
+    
+    if len(lines) <= max_lines:
+        return output, False
+    
+    return output, False 
