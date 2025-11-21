@@ -33,3 +33,12 @@ class TestTruncateOutput:
         
         assert "85" in result  
         assert was_truncated is True
+    
+    def test_message_instructs_how_to_view_full(self):
+        """Truncation message should tell user how to see full output."""
+        output = "\n".join([f"Line {i}" for i in range(50)])
+        
+        result, was_truncated = truncate_output(output)
+        
+        assert "/full" in result.lower()  # Deve mencionar comando /full
+        assert was_truncated is True
