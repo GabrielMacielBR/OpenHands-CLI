@@ -106,28 +106,43 @@ def display_welcome(conversation_id: UUID, resume: bool = False) -> None:
     print()
 
 
-def truncate_output(output: str, max_lines: int = MAX_OUTPUT_LINES) -> tuple[str, bool]:
+def truncate_output(output: str | list, max_lines: int = MAX_OUTPUT_LINES) -> tuple[str, bool]:
     """
     Truncate command output to a specified number of lines.
-    
+   
     Args:
-        output: The full output text
-        max_lines: Maximum number of lines to display
-    
+        output: The full output text or list of strings/objects
+        max_lines: Maximum number of lines to display (must be > 0)
+   
     Returns:
         Tuple of (output, was_truncated)
+   
+    Raises:
+        ValueError: If max_lines <= 0
     """
+    if max_lines <= 0:
+        raise ValueError("max_lines must be greater than 0")
+   
+    # Convert list to string if needed
+    if isinstance(output, list):
+        text_parts = []
+        for item in output:
+            # Extract .text attribute if available (TextContent objects)
+            if hasattr(item, 'text'):
+                text_parts.append(item.text)
+            else:
+                text_parts.append(str(item))
+        output = "\n".join(text_parts)
+   
     lines = output.splitlines()
     total_lines = len(lines)
-    
-    # No truncation needed for short outputs
+   
     if total_lines <= max_lines:
         return output, False
-    
-    # Build truncated output with informative message
+   
     visible_lines = lines[:max_lines]
     hidden_lines = total_lines - max_lines
     truncation_message = TRUNCATION_MESSAGE.format(remaining=hidden_lines)
-    
+   
     truncated_output = "\n".join(visible_lines) + "\n" + truncation_message
     return truncated_output, True

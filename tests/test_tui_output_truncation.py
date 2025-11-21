@@ -44,11 +44,11 @@ class TestTruncateOutput:
         assert was_truncated is True
     
     def test_handles_list_input(self):
-    """Should convert list to string before processing."""
-    # Simula lista de strings
-    list_input = [f"Line {i}" for i in range(20)]
-    
-    result, was_truncated = truncate_output(list_input)
-    
-    assert was_truncated is True
-    assert "5 more lines" in result  # 20 - 15 = 5
+        """Should convert list to string before processing."""
+        # Simula lista de strings
+        list_input = [f"Line {i}" for i in range(20)]
+        
+        result, was_truncated = truncate_output(list_input)
+        
+        assert was_truncated is True
+        assert "5 more lines" in result  # 20 - 15 = 5
