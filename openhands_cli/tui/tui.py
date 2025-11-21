@@ -11,7 +11,7 @@ from openhands_cli.pt_style import get_cli_style
 
 # Output truncation settings
 MAX_OUTPUT_LINES = 15
-TRUNCATION_MESSAGE = "... more lines hidden"
+TRUNCATION_MESSAGE = "... and {remaining} more lines hidden"
 
 DEFAULT_STYLE = get_cli_style()
 
@@ -105,6 +105,7 @@ def display_welcome(conversation_id: UUID, resume: bool = False) -> None:
     )
     print()
 
+
 def truncate_output(output: str, max_lines: int = MAX_OUTPUT_LINES) -> tuple[str, bool]:
     """
     Truncate command output to a specified number of lines.
@@ -117,11 +118,16 @@ def truncate_output(output: str, max_lines: int = MAX_OUTPUT_LINES) -> tuple[str
         Tuple of (output, was_truncated)
     """
     lines = output.splitlines()
+    total_lines = len(lines)
     
-    if len(lines) <= max_lines:
+    # No truncation needed for short outputs
+    if total_lines <= max_lines:
         return output, False
     
-    # Truncate and add message
-    truncated_lines = lines[:max_lines]
-    truncated_output = "\n".join(truncated_lines) + "\n" + TRUNCATION_MESSAGE
+    # Build truncated output with informative message
+    visible_lines = lines[:max_lines]
+    hidden_lines = total_lines - max_lines
+    truncation_message = TRUNCATION_MESSAGE.format(remaining=hidden_lines)
+    
+    truncated_output = "\n".join(visible_lines) + "\n" + truncation_message
     return truncated_output, True
